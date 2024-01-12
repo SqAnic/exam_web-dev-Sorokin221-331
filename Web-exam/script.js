@@ -5,10 +5,19 @@ let name
 let nameOfRout = document.querySelector(".nameOfRout");
 let buttonSearch = document.querySelector(".search-btn");
 let selectElement = document.querySelector(".languageSelect");
-let workExperience1 = document.querySelector(".workExperience1")
-let workExperience2 = document.querySelector(".workExperience2")
+let workExperience1 = document.querySelector(".workExperience1");
+let workExperience2 = document.querySelector(".workExperience2");
 let nameForm = document.querySelector(".nameForm");
 let routeForm = document.querySelector(".routeForm");
+let totalCost = document.querySelector(".totalCost");
+let durationForm = document.querySelector(".timeChoice");
+let priceForm = document.querySelector(".totalCost");
+let option1 = document.querySelector(".option1");
+let option2 = document.querySelector(".option2");
+let timeForm = document.querySelector(".startTime");
+let numberOfPeaple = document.querySelector(".numberOfPeaple");
+let pricePerHour, optionOne = 1, optionTwo = 1, isItMorning = 0 ,isItEvening = 0,numberOfVisitors = 0;
+let numberHour = 1;
 
 const recordsPerPage = 3;
 let totalRecords;
@@ -67,6 +76,138 @@ function paginationChecker(flag, currentPage) {
     paganationCreater(flag, startPage, endPage, currentPage);
 }
 
+function costCalculate(costPerHour, calculateFlag) {
+    if (calculateFlag == 1 ){
+        pricePerHour = costPerHour;
+        console.log(pricePerHour);
+    }
+    else if (calculateFlag == 2 ){
+        numberHour = costPerHour;
+        console.log(numberHour);
+    }
+    else if (calculateFlag == 3 ){
+        optionOne = costPerHour;
+        console.log(optionOne);
+    }
+    else if (calculateFlag == 4 ){
+        optionTwo = costPerHour;
+        console.log(optionTwo);
+    }
+    else if (calculateFlag == 5 ){
+        isItMorning = costPerHour;
+        console.log(isItMorning);
+    }
+    else if (calculateFlag == 6 ){
+        isItEvening = costPerHour;
+        console.log(isItMorning);
+    }
+    else if (calculateFlag == 7 ){
+        isItMorning = 0;
+        isItEvening = 0;
+        console.log(isItMorning, isItEvening);
+    }
+    else if (calculateFlag == 8 ){
+        numberOfVisitors = costPerHour;
+        console.log(numberOfVisitors);
+    }
+    else if (calculateFlag == 9 ){
+        numberOfVisitors = costPerHour;
+        console.log(numberOfVisitors);
+    }
+
+    priceForm.innerHTML = '';
+    priceForm.innerHTML = Math.floor(pricePerHour * numberHour * optionOne * optionTwo + isItMorning + isItEvening + numberOfVisitors);
+}
+option1.addEventListener('change', function() {
+    if (option1.checked) {
+        costCalculate(1.3, 3);
+    } else {
+        priceForm.innerHTML = Math.floor(pricePerHour * numberHour * optionTwo + isItMorning + isItEvening + numberOfVisitors);
+        costCalculate(1, 3);
+    }
+});
+
+
+option2.addEventListener('change', function() {
+    const input = document.getElementById('excursionDate');
+    const date = new Date(input.value);
+    const dayOfWeek = date.getDay();
+
+    if (option2.checked && (dayOfWeek === 0 || dayOfWeek === 6)) {
+        costCalculate(1.25, 4);
+    } 
+    else if (option2.checked && dayOfWeek > 0 && dayOfWeek < 6) {
+        costCalculate(1.3, 4);
+    }
+    else {
+        priceForm.innerHTML = Math.floor(pricePerHour * numberHour * optionOne + isItMorning + isItEvening + numberOfVisitors);
+        costCalculate(1, 4);
+    }
+});
+durationForm.addEventListener('change', function(){
+    costCalculate(parseInt(durationForm.value, 10), 2)
+});
+
+let timeout;
+
+timeForm.addEventListener('change', function() {
+    clearTimeout(timeout); // Отмена предыдущего таймера, если он был установлен
+
+    timeout = setTimeout(function() {
+        const selectedTime = timeForm.value; 
+        const hours = parseInt(selectedTime.split(":")[0], 10);
+        const mins = parseInt(selectedTime.split(":")[1], 10);
+
+        if (mins.length != 0 && hours.length != 0)
+        {
+            if (hours < 9 || (hours == 23 && mins > 0) || mins % 30 != 0) 
+            {
+                alert("Часы работы с 9:00 до 23:00 c инетрвалом в 30 минут"); // Уведомление
+                timeForm.value = '';
+            }
+            else if (hours >= 9 && hours <= 12) 
+            {
+                costCalculate(400, 5)
+            }
+            else if (hours >= 20 && hours <= 23)
+            {
+                costCalculate(1000, 6)
+            }
+            else {
+                priceForm.innerHTML = Math.floor(pricePerHour * numberHour * optionOne * optionTwo + numberOfVisitors);
+                costCalculate(0, 7)
+            }
+        }
+
+
+    }, 10000); // Задержка 1000 мс (1.0 секундf)
+});
+
+numberOfPeaple.addEventListener('change', function() {
+    numberPeaple = parseInt(numberOfPeaple.value, 10);
+    console.log(typeof numberPeaple);
+    if (numberOfPeaple.value.length > 0 & Number.isInteger(numberPeaple) & (numberPeaple >= 1 && numberPeaple <= 20)) {
+        if (numberPeaple >= 0 && numberPeaple <= 5) {
+            priceForm.innerHTML = Math.floor(pricePerHour * numberHour * optionOne * optionTwo);
+        }
+        else if (numberPeaple > 5 && numberPeaple <= 10) {
+            priceForm.innerHTML = Math.floor(pricePerHour * numberHour * optionOne * optionTwo);
+            costCalculate(1000, 8);
+        }
+        else if (numberPeaple > 10 && numberPeaple <= 20) {
+            priceForm.innerHTML = Math.floor(pricePerHour * numberHour * optionOne * optionTwo);
+            costCalculate(1500, 9);
+        }
+    }
+    else {
+        timeout = setTimeout(5000);
+        alert("В группе может быть от 1 до 20 человек"); // Уведомление
+        numberOfPeaple.value = '';
+    }
+});
+
+
+
 
 function showPage(flag, currentPage) {
     let start = (currentPage - 1) * recordsPerPage;
@@ -109,6 +250,11 @@ function showPage(flag, currentPage) {
 
     if (flag == 2)
     {
+        let optionElement = document.createElement('option');
+        selectElement.innerHTML = '';
+        optionElement.value = "Не выбрано";
+        optionElement.text = "Не выбрано";
+        selectElement.appendChild(optionElement);
         tableOfGuides = document.querySelector(".ofGuides tbody");
         tableOfGuides.innerHTML = '';
         let nameOfRout = document.querySelector(".nameOfRout");
@@ -133,15 +279,13 @@ function showPage(flag, currentPage) {
             cell5.innerHTML = item.pricePerHour;
     
             let selectButton = document.createElement('button');
-            selectButton.type = 'button';
             selectButton.className = 'btn btn-success';
-            selectButton.dataset.bsToggle = 'modal';
-            selectButton.dataset.bsTarget = '#staticBackdrop';
             selectButton.textContent = 'Выбрать';
             cell6.appendChild(selectButton);
             
             selectButton.addEventListener('click', function() {
                 nameForm.innerHTML = item.name;
+                costCalculate(parseInt(item.pricePerHour, 10), 1);
             });
 
             });
@@ -165,10 +309,14 @@ function showPage(flag, currentPage) {
             selectButton.innerHTML = 'Выбрать';
             selectButton.className = 'btn btn-primary align-';
             cell5.appendChild(selectButton);
+
+            selectButton.addEventListener('click', function() {
+                nameForm.innerHTML = item.name;
+            });
         }
 
         languageSet.forEach(function (language) {
-            let optionElement = document.createElement('option');
+            optionElement = document.createElement('option');
             optionElement.value = language;
             optionElement.text = language;
             selectElement.appendChild(optionElement);
@@ -244,7 +392,9 @@ function extraGuideTableCreater(item) {
     selectButton.innerHTML = 'Выбрать';
     selectButton.className = 'btn btn-primary align-';
     cell6.appendChild(selectButton);
-    flagChange = true;
+    selectButton.addEventListener('click', function() {
+        nameForm.innerHTML = item.name;
+    });
 }
 
 function filterAndDisplayGuides() {
@@ -259,7 +409,6 @@ function filterAndDisplayGuides() {
         const guideExperience = guide.workExperience >= minExperience && guide.workExperience <= maxExperience; // Соответствие опыту работы
 
         if (guideLanguage && guideExperience) {
-            // Добавление строки в таблицу
             extraGuideTableCreater(guide);
         }
     });
