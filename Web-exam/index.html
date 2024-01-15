@@ -183,7 +183,7 @@
         Оформить заявку
     </button>
     
-    <div class="modal fade formWindow" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <form  class="modal fade formWindow" id="staticBackdrop" action="/personalArea.html" method="post" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
@@ -193,11 +193,11 @@
                 <div class="modal-body">
                     <form>
                         <div class="mb-3">
-                            <label for="guideName" class="form-label">ФИО гида:</label>
+                            <label class="form-label">ФИО гида:</label>
                             <span class="nameForm fw-bolder">...</span>
                         </div>
                         <div class="mb-3">
-                            <label for="routeName" class="form-label">Название маршрута:</label>
+                            <label class="form-label">Название маршрута:</label>
                             <span class="routeForm fw-bolder">...</span>
                         </div>
                         <div class="row g-3 mb-3">
@@ -246,11 +246,11 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                    <button type="button" class="btn btn-success">Оформить</button>
+                    <button type="submit" class="btn btn-success">Оформить</button>
                 </div>
             </div>
         </div>
-    </div>
+    </form >
 
     
     
